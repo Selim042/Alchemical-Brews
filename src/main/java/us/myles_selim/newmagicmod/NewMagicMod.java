@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
-// TODO: figure out a real name for the mod and update all names here
+// TODO: figure out a real name for the mod and update all names here (& and mcmod.info)
 @Mod(modid = NewMagicMod.MODID, name = NewMagicMod.NAME, version = NewMagicMod.VERSION)
 public class NewMagicMod
 {
