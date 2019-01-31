@@ -18,10 +18,8 @@ public class VanillaPacketDispatcher {
 		if (entry == null)
 			return;
 
-		for (EntityPlayerMP player : entry.getWatchingPlayers()) {
+		for (EntityPlayerMP player : entry.getWatchingPlayers())
 			player.connection.sendPacket(tile.getUpdatePacket());
-			System.out.println("sending");
-		}
 
 	}
 

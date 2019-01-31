@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import us.myles_selim.newmagicmod.ingredients.SpellIngredient;
+import us.myles_selim.newmagicmod.ingredients.stack.special.ChickenFeatherIngredient;
 import us.myles_selim.newmagicmod.ingredients.stack.special.FriedNetherCocoaIngredient;
 import us.myles_selim.newmagicmod.ingredients.stack.special.FullMoonGunpowderIngredient;
 import us.myles_selim.newmagicmod.ingredients.stack.special.SpecialStackSpellIngredient;
@@ -34,6 +35,10 @@ public class ModRegistry {
 		public static final SpecialStackSpellIngredient FULL_MOON_GUNPOWDER = null;
 		public static final SpecialStackSpellIngredient TRIPPLE_MOON_EGG = null;
 		public static final SpecialStackSpellIngredient FRIED_NETHER_COCOA = null;
+		// public static final SpecialStackSpellIngredient MOON_FERMENTED_EYE =
+		// null;
+		public static final SpecialStackSpellIngredient CHICKEN_FEATHER = null;
+		// public static final SpecialStackSpellIngredient END_DIAMOND = null;
 
 	}
 
@@ -69,6 +74,11 @@ public class ModRegistry {
 		registry.register(new FullMoonGunpowderIngredient());
 		registry.register(new TripleMoonEggIngredient());
 		registry.register(new FriedNetherCocoaIngredient());
+		// TODO: disabled, can't get crafting to work as intended
+		// registry.register(new MoonEyeSpellIngredient());
+		registry.register(new ChickenFeatherIngredient());
+		// TODO: disabled, can't get smelting to work as intended
+		// registry.register(new EndDiamondIngredient());
 	}
 
 	@SubscribeEvent

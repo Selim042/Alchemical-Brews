@@ -1,7 +1,5 @@
 package us.myles_selim.newmagicmod;
 
-import java.awt.Color;
-
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
@@ -13,7 +11,13 @@ public class ParticleColoredBubble extends Particle {
 
 	protected ParticleColoredBubble(World world, double xCoord, double yCoord, double zCoord,
 			double xSpeed, double ySpeed, double zSpeed) {
-		this(world, xCoord, yCoord, yCoord, xSpeed, ySpeed, zSpeed, 1.0f, 1.0f, 1.0f);
+		this(world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, 1.0f, 1.0f, 1.0f);
+	}
+
+	protected ParticleColoredBubble(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
+			double xSpeedIn, double ySpeedIn, double zSpeedIn, float[] color) {
+		this(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, color[0], color[1],
+				color[2]);
 	}
 
 	protected ParticleColoredBubble(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
@@ -21,7 +25,7 @@ public class ParticleColoredBubble extends Particle {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
 		this.particleRed = r;
 		this.particleGreen = g;
-		this.particleBlue = b - 0.8f;
+		this.particleBlue = b - 1.0f;
 		this.setParticleTextureIndex(32);
 		this.setSize(0.02F, 0.02F);
 		this.particleScale *= this.rand.nextFloat() * 0.6F + 0.2F;
@@ -62,10 +66,8 @@ public class ParticleColoredBubble extends Particle {
 			if (args.length < 1)
 				return new ParticleColoredBubble(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn,
 						ySpeedIn, zSpeedIn);
-			Color color = new Color(args[0]);
 			return new ParticleColoredBubble(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn,
-					zSpeedIn, color.getRed() / 255.0f, color.getGreen() / 255.0f,
-					color.getBlue() / 255.0f);
+					zSpeedIn, ColorUtils.rgbToIndFloats(args[0]));
 		}
 	}
 

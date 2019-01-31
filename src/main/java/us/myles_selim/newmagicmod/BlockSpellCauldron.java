@@ -86,8 +86,7 @@ public class BlockSpellCauldron extends BlockContainer {
 							&& rand.nextFloat() > ((mc.gameSettings.particleSetting + 1) * 0.15f))
 						worldIn.spawnParticle(ModRegistry.Particles.COLORED_BUBBLE_PARTICLE, x + offX,
 								y + offY, z + offZ, rand.nextFloat() / 10, 0.25D - rand.nextFloat() / 4,
-								rand.nextFloat() / 10,
-								mc.getBlockColors().colorMultiplier(stateIn, worldIn, pos, 1));
+								rand.nextFloat() / 10, ((TileSpellCauldron) te).getWaterColor());
 		// worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D,
 		// 0.0D, 0.0D);
 	}

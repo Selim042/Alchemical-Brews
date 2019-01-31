@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -47,23 +48,20 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 
 	@SideOnly(Side.CLIENT)
 	public int getWaterColor() {
-		int waterColor = BiomeColorHelper.getGrassColorAtPos(world, pos) - 0x121200 + 0x000022;
-		long ingColor = 0x000000;
-		int numIngs = 0;
+		int[] waterColor = ColorUtils
+				.rgbToIndInts(BiomeColorHelper.getGrassColorAtPos(world, pos) - 0x121200 + 0x000022);
+		int r = waterColor[0];
+		int g = waterColor[1];
+		int b = waterColor[2];
+		int numIng = 1;
 		for (int i = 0; i < ingredients.size(); i++) {
-			// return ingredients.get(i).getIngredientColor();
-			ingColor += ingredients.get(i).getIngredientColor() + getOffset(i);
-			numIngs++;
+			int[] color = ColorUtils.rgbToIndInts(ingredients.get(i).getIngredientColor());
+			r += color[0];
+			g += color[1];
+			b += color[2];
+			numIng++;
 		}
-		if (numIngs == 0)
-			return waterColor;
-		ingColor += waterColor + waterColor;
-		return (int) (ingColor / numIngs);
-	}
-
-	private int getOffset(int i) {
-		i = i % 6;
-		return 0xF << i;
+		return ColorUtils.invIntsToRGB(r / numIng, g / numIng, b / numIng);
 	}
 
 	@Override
@@ -82,7 +80,6 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 			if (this.transferCooldown <= 0 && pickupIngredients(this)) {
 				this.transferCooldown = 8;
 				this.markDirty();
-				System.out.println("marked dirty");
 				VanillaPacketDispatcher.dispatchTEToNearbyPlayers(getWorld(), getPos());
 				this.getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
 				return true;
@@ -116,13 +113,11 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
-		System.out.println("getUpdateTag");
 		return this.serializeNBT();
 	}
 
 	@Override
 	public void handleUpdateTag(NBTTagCompound nbt) {
-		System.out.println("handleUpdateTag");
 		this.deserializeNBT(nbt);
 		this.getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
@@ -130,6 +125,11 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		handleUpdateTag(pkt.getNbtCompound());
 	}
 
 	@Override
