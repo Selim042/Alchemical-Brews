@@ -8,6 +8,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.ModRegistry;
 import us.myles_selim.newmagicmod.items.SpecialItemHandler;
 
@@ -23,11 +25,17 @@ public class FriedNetherCocoaIngredient extends SpecialStackSpellIngredient {
 		return new ItemStack(Items.DYE, 1, 3);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip,
 			ITooltipFlag flagIn) {
 		// TODO: localize
 		tooltip.add("Fried on a nether fire");
+	}
+
+	@Override
+	public int getIngredientColor() {
+		return 0x654321;
 	}
 
 	public static class FriedNetherCocoaItemHandler extends SpecialItemHandler {

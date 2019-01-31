@@ -11,10 +11,14 @@ public class MiscUtils {
 	}
 
 	public static BlockPos nbtToBlockPos(NBTTagCompound nbt) {
+		if (nbt == null)
+			return new BlockPos(0, 0, 0);
 		return new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
 	}
 
 	public static NBTTagCompound blockPosToNBT(BlockPos pos) {
+		if (pos == null)
+			return new NBTTagCompound();
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("x", pos.getX());
 		nbt.setInteger("y", pos.getY());

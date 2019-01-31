@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "is_full=false": { "model": "new_magic_mod:spell_cauldron_empty" },
+        "is_full=true": { "model": "new_magic_mod:spell_cauldron_full" }
+    }
+}

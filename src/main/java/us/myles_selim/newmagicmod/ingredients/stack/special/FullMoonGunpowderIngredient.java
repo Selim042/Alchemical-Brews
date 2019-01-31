@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.MiscUtils;
 import us.myles_selim.newmagicmod.ModRegistry;
 
@@ -27,11 +29,17 @@ public class FullMoonGunpowderIngredient extends SpecialStackSpellIngredient {
 		return new ItemStack(Items.GUNPOWDER);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip,
 			ITooltipFlag flagIn) {
 		// TODO: localize
 		tooltip.add("Obtained from a creeper killed under a full moon");
+	}
+
+	@Override
+	public int getIngredientColor() {
+		return 0x121212;
 	}
 
 	@SubscribeEvent

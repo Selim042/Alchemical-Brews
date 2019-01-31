@@ -17,4 +17,8 @@ public class SpellIngredient extends IForgeRegistryEntry.Impl<SpellIngredient> {
 		this.setRegistryName(modID, name);
 	}
 
+	public int getIngredientColor() {
+		return 0;
+	}
+
 }

@@ -9,18 +9,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.MiscUtils;
 import us.myles_selim.newmagicmod.NewMagicMod;
 import us.myles_selim.newmagicmod.items.SpecialItemHandler;
 
 @Mod.EventBusSubscriber
-public class TrippleMoonEggIngredient extends SpecialStackSpellIngredient {
+public class TripleMoonEggIngredient extends SpecialStackSpellIngredient {
 
 	private static final String MOON_COUNTER = NewMagicMod.MOD_ID + "_egg_moons";
 	private static final String MOON_TIMER = NewMagicMod.MOD_ID + "_egg_time";
 
-	public TrippleMoonEggIngredient() {
-		super("tripple_moon_egg");
+	public TripleMoonEggIngredient() {
+		super("triple_moon_egg");
 	}
 
 	@Override
@@ -35,6 +37,7 @@ public class TrippleMoonEggIngredient extends SpecialStackSpellIngredient {
 		return stack;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip,
 			ITooltipFlag flagIn) {
@@ -45,9 +48,21 @@ public class TrippleMoonEggIngredient extends SpecialStackSpellIngredient {
 		tooltip.add("An egg bathed in the light of " + nbt.getInteger(MOON_COUNTER) + " full moons");
 	}
 
-	public static class TrippleEggItemHandler extends SpecialItemHandler {
+	@Override
+	public int getIngredientColor() {
+		return 0xFFFDD0;
+	}
 
-		public TrippleEggItemHandler() {
+	@Override
+	public boolean matchesStack(ItemStack stack) {
+		return stack.hasTagCompound()
+				&& stack.getTagCompound().getString(SpecialStackSpellIngredient.INGREDIENT_KEY)
+						.equals(this.getRegistryName().toString());
+	}
+
+	public static class TripleleEggItemHandler extends SpecialItemHandler {
+
+		public TripleleEggItemHandler() {
 			super(new ItemStack(Items.EGG));
 		}
 

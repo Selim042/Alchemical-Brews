@@ -28,7 +28,7 @@ public class EntitySpecialSpellItem extends EntityItem {
 	@Override
 	public boolean isEntityInvulnerable(@Nonnull DamageSource source) {
 		if (source == DamageSource.IN_FIRE && world.provider.getDimension() == -1) {
-			if (!changed)
+			if (handler != null && !changed)
 				changed = handler.onBurned(this);
 			return true;
 		} else
@@ -38,7 +38,7 @@ public class EntitySpecialSpellItem extends EntityItem {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!changed)
+		if (handler != null && !changed)
 			changed = handler.onTick(this);
 	}
 
