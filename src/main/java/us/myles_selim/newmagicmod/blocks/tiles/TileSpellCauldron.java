@@ -1,4 +1,4 @@
-package us.myles_selim.newmagicmod;
+package us.myles_selim.newmagicmod.blocks.tiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.myles_selim.newmagicmod.ModRegistry;
+import us.myles_selim.newmagicmod.ModRegistry.Registries;
+import us.myles_selim.newmagicmod.blocks.BlockSpellCauldron;
 import us.myles_selim.newmagicmod.ingredients.SpellIngredient;
 import us.myles_selim.newmagicmod.ingredients.stack.special.SpecialStackSpellIngredient;
+import us.myles_selim.newmagicmod.utils.ColorUtils;
+import us.myles_selim.newmagicmod.utils.MiscUtils;
+import us.myles_selim.newmagicmod.utils.VanillaPacketDispatcher;
 
 public class TileSpellCauldron extends TileEntity implements ITickable {
 

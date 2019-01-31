@@ -1,4 +1,4 @@
-package us.myles_selim.newmagicmod;
+package us.myles_selim.newmagicmod.blocks;
 
 import java.util.List;
 import java.util.Random;
@@ -38,6 +38,10 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.myles_selim.newmagicmod.ModRegistry;
+import us.myles_selim.newmagicmod.NewMagicMod;
+import us.myles_selim.newmagicmod.ModRegistry.Particles;
+import us.myles_selim.newmagicmod.blocks.tiles.TileSpellCauldron;
 import us.myles_selim.newmagicmod.ingredients.SpellIngredient;
 
 public class BlockSpellCauldron extends BlockContainer {

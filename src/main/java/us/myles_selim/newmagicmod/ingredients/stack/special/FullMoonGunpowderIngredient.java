@@ -14,8 +14,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import us.myles_selim.newmagicmod.MiscUtils;
 import us.myles_selim.newmagicmod.ModRegistry;
+import us.myles_selim.newmagicmod.utils.MiscUtils;
 
 @Mod.EventBusSubscriber
 public class FullMoonGunpowderIngredient extends SpecialStackSpellIngredient {

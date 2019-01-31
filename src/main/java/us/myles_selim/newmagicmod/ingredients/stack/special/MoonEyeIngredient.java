@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
-import us.myles_selim.newmagicmod.MiscUtils;
+import us.myles_selim.newmagicmod.utils.MiscUtils;
 
 // TODO: finish, crafting only sorta works
 //@Mod.EventBusSubscriber

@@ -1,4 +1,4 @@
-package us.myles_selim.newmagicmod;
+package us.myles_selim.newmagicmod.entities;
 
 import javax.annotation.Nonnull;
 

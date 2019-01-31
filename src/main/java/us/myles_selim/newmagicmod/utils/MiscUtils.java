@@ -1,4 +1,4 @@
-package us.myles_selim.newmagicmod;
+package us.myles_selim.newmagicmod.utils;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;

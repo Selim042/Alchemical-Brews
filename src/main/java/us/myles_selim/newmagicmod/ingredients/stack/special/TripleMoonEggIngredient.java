@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import us.myles_selim.newmagicmod.MiscUtils;
 import us.myles_selim.newmagicmod.NewMagicMod;
 import us.myles_selim.newmagicmod.items.SpecialItemHandler;
+import us.myles_selim.newmagicmod.utils.MiscUtils;
 
 @Mod.EventBusSubscriber
 public class TripleMoonEggIngredient extends SpecialStackSpellIngredient {

@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
+import us.myles_selim.newmagicmod.blocks.BlockSpellCauldron;
+import us.myles_selim.newmagicmod.blocks.tiles.TileSpellCauldron;
 import us.myles_selim.newmagicmod.ingredients.SpellIngredient;
 import us.myles_selim.newmagicmod.ingredients.stack.special.ChickenFeatherIngredient;
 import us.myles_selim.newmagicmod.ingredients.stack.special.FriedNetherCocoaIngredient;

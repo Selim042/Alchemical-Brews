@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.myles_selim.newmagicmod.entities.EntitySpecialSpellItem;
 import us.myles_selim.newmagicmod.ingredients.stack.special.SpecialStackSpellIngredient;
 import us.myles_selim.newmagicmod.items.SpecialItemHandler;
 

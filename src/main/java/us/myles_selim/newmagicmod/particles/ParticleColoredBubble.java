@@ -1,10 +1,11 @@
-package us.myles_selim.newmagicmod;
+package us.myles_selim.newmagicmod.particles;
 
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.myles_selim.newmagicmod.utils.ColorUtils;
 
 @SideOnly(Side.CLIENT)
 public class ParticleColoredBubble extends Particle {

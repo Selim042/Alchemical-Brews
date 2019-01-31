@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import us.myles_selim.newmagicmod.ModRegistry;
 import us.myles_selim.newmagicmod.NewMagicMod;
-import us.myles_selim.newmagicmod.ParticleColoredBubble;
-import us.myles_selim.newmagicmod.TileSpellCauldron;
+import us.myles_selim.newmagicmod.blocks.tiles.TileSpellCauldron;
+import us.myles_selim.newmagicmod.particles.ParticleColoredBubble;
 
 public class ClientProxy extends CommonProxy {
 

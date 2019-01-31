@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import us.myles_selim.newmagicmod.entities.EntitySpecialSpellItem;
 import us.myles_selim.newmagicmod.proxy.CommonProxy;
 
 // TODO: figure out a real name for the mod and update all names here (and mcmod.info)
