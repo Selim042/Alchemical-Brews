@@ -17,8 +17,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.entities.EntitySpecialSpellItem;
+import us.myles_selim.newmagicmod.ingredients.SpecialItemHandler;
 import us.myles_selim.newmagicmod.ingredients.stack.special.SpecialStackSpellIngredient;
-import us.myles_selim.newmagicmod.items.SpecialItemHandler;
 
 @Mod.EventBusSubscriber
 public class GeneralEventHandler {
@@ -54,8 +54,8 @@ public class GeneralEventHandler {
 			EntityItem entityItem = (EntityItem) entity;
 			ItemStack stack = entityItem.getItem();
 			ResourceLocation key = stack.getItem().getRegistryName();
-			if (!stack.isEmpty() && ModRegistry.Registries.SPECIAL_ITEM_HANDLERS.containsKey(key)) {
-				SpecialItemHandler handler = ModRegistry.Registries.SPECIAL_ITEM_HANDLERS.getValue(key);
+			if (!stack.isEmpty() && ModRegistry.ModRegistries.SPECIAL_ITEM_HANDLERS.containsKey(key)) {
+				SpecialItemHandler handler = ModRegistry.ModRegistries.SPECIAL_ITEM_HANDLERS.getValue(key);
 				if (!handler.matchesStack(stack))
 					return;
 				// System.out.println("exchanged");

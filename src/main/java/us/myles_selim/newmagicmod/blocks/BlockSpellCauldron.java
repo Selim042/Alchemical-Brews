@@ -40,9 +40,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.ModRegistry;
 import us.myles_selim.newmagicmod.NewMagicMod;
-import us.myles_selim.newmagicmod.ModRegistry.Particles;
 import us.myles_selim.newmagicmod.blocks.tiles.TileSpellCauldron;
 import us.myles_selim.newmagicmod.ingredients.SpellIngredient;
+import us.myles_selim.newmagicmod.recipes.ISpellRecipe;
 
 public class BlockSpellCauldron extends BlockContainer {
 
@@ -59,8 +59,9 @@ public class BlockSpellCauldron extends BlockContainer {
 	protected static final AxisAlignedBB AABB_WALL_WEST = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D,
 			1.0D, 1.0D);
 
-	protected BlockSpellCauldron() {
+	public BlockSpellCauldron() {
 		super(Material.IRON, MapColor.STONE);
+		this.setHardness(2.0F);
 		this.setRegistryName("spell_cauldron");
 		this.setUnlocalizedName(NewMagicMod.MOD_ID + ":spell_cauldron");
 		this.setDefaultState(getStateFromMeta(0));
@@ -88,7 +89,7 @@ public class BlockSpellCauldron extends BlockContainer {
 				for (float offY = 0.0f; offY < 0.75f; offY += (rand.nextFloat() / 2))
 					if (rand.nextBoolean()
 							&& rand.nextFloat() > ((mc.gameSettings.particleSetting + 1) * 0.15f))
-						worldIn.spawnParticle(ModRegistry.Particles.COLORED_BUBBLE_PARTICLE, x + offX,
+						worldIn.spawnParticle(ModRegistry.ModParticles.COLORED_BUBBLE_PARTICLE, x + offX,
 								y + offY, z + offZ, rand.nextFloat() / 10, 0.25D - rand.nextFloat() / 4,
 								rand.nextFloat() / 10, ((TileSpellCauldron) te).getWaterColor());
 		// worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D,
@@ -101,10 +102,26 @@ public class BlockSpellCauldron extends BlockContainer {
 			float hitZ) {
 		ItemStack stack = playerIn.getHeldItem(hand);
 		TileSpellCauldron cauldron = (TileSpellCauldron) worldIn.getTileEntity(pos);
-		if (worldIn.isRemote)
-			for (SpellIngredient ing : cauldron.getIngredients())
-				playerIn.sendStatusMessage(new TextComponentString(ing.getRegistryName().toString()),
+		if (worldIn.isRemote) {
+			for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
+				playerIn.sendStatusMessage(new TextComponentString(r.getRegistryName().toString()),
 						false);
+				for (SpellIngredient ing : r.getIngredients())
+					if (ing != null)
+						playerIn.sendStatusMessage(
+								new TextComponentString(" - " + ing.getRegistryName().toString()),
+								false);
+					else
+						playerIn.sendStatusMessage(new TextComponentString(" - null ing"), false);
+			}
+			playerIn.sendStatusMessage(new TextComponentString("in cauldron"), false);
+			for (SpellIngredient ing : cauldron.getIngredients())
+				if (ing != null)
+					playerIn.sendStatusMessage(
+							new TextComponentString(" - " + ing.getRegistryName().toString()), false);
+				else
+					playerIn.sendStatusMessage(new TextComponentString(" - null ing"), false);
+		}
 
 		if (stack.isEmpty())
 			return true;
@@ -197,7 +214,7 @@ public class BlockSpellCauldron extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override

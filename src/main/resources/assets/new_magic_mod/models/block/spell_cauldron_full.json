@@ -1,5 +1,6 @@
 {
     "ambientocclusion": false,
+    "parent": "block/cube",
     "textures": {
         "particle": "blocks/cauldron_side",
         "top": "blocks/cauldron_top",

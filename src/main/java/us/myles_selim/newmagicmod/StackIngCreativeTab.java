@@ -1,7 +1,6 @@
 package us.myles_selim.newmagicmod;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import us.myles_selim.newmagicmod.ingredients.SpellIngredient;
@@ -15,12 +14,12 @@ public class StackIngCreativeTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getTabIconItem() {
-		return new ItemStack(Items.CAULDRON);
+		return new ItemStack(ModRegistry.ModItems.SPELL_CAULDRON);
 	}
 
 	@Override
 	public void displayAllRelevantItems(NonNullList<ItemStack> items) {
-		for (SpellIngredient ing : ModRegistry.Registries.SPELL_INGREDIENTS.getValuesCollection()) {
+		for (SpellIngredient ing : ModRegistry.ModRegistries.SPELL_INGREDIENTS.getValuesCollection()) {
 			if (ing instanceof SpecialStackSpellIngredient)
 				items.add(((SpecialStackSpellIngredient) ing).getStack());
 		}

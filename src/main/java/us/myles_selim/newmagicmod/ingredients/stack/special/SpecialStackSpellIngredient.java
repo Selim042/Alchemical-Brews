@@ -59,14 +59,18 @@ public abstract class SpecialStackSpellIngredient extends SpellIngredient {
 			ITooltipFlag flagIn) {}
 
 	public static boolean isSpecialSpellIngredient(ItemStack stack) {
-		return stack.hasTagCompound() && stack.getTagCompound().hasKey(INGREDIENT_KEY);
+		if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey(INGREDIENT_KEY))
+			return false;
+		ResourceLocation resource = new ResourceLocation(
+				stack.getTagCompound().getString(INGREDIENT_KEY));
+		return ModRegistry.ModRegistries.SPELL_INGREDIENTS.containsKey(resource);
 	}
 
 	public static SpecialStackSpellIngredient getIngredient(ItemStack stack) {
 		if (!isSpecialSpellIngredient(stack))
 			return null;
 		String locationS = stack.getTagCompound().getString(INGREDIENT_KEY);
-		return (SpecialStackSpellIngredient) ModRegistry.Registries.SPELL_INGREDIENTS
+		return (SpecialStackSpellIngredient) ModRegistry.ModRegistries.SPELL_INGREDIENTS
 				.getValue(new ResourceLocation(locationS));
 	}
 

@@ -2,20 +2,29 @@ package us.myles_selim.newmagicmod.proxy;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.ModRegistry;
 import us.myles_selim.newmagicmod.NewMagicMod;
 import us.myles_selim.newmagicmod.blocks.tiles.TileSpellCauldron;
 import us.myles_selim.newmagicmod.particles.ParticleColoredBubble;
 
+@SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber
 public class ClientProxy extends CommonProxy {
 
 	@Override
@@ -39,12 +48,23 @@ public class ClientProxy extends CommonProxy {
 					return 0;
 				return ((TileSpellCauldron) te).getWaterColor();
 			}
-		}, ModRegistry.Blocks.SPELL_CAULDRON);
+		}, ModRegistry.ModBlocks.SPELL_CAULDRON);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void registerModels(ModelRegistryEvent event) {
+		ModelLoader.setCustomModelResourceLocation(ModRegistry.ModItems.SPELL_CAULDRON, 0,
+				new ModelResourceLocation(ModRegistry.ModItems.SPELL_CAULDRON.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModRegistry.ModItems.SPAWN_POTION, 0,
+				new ModelResourceLocation(ModRegistry.ModItems.SPAWN_POTION.getRegistryName(),
+						"inventory"));
 	}
 
 	public static void registerParticles() {
 		int id = getNextParticleId();
-		ModRegistry.Particles.COLORED_BUBBLE_PARTICLE = EnumHelper.addEnum(EnumParticleTypes.class,
+		ModRegistry.ModParticles.COLORED_BUBBLE_PARTICLE = EnumHelper.addEnum(EnumParticleTypes.class,
 				NewMagicMod.MOD_ID + "COLORED_BUBBLE_PARTICLE",
 				new Class[] { String.class, int.class, boolean.class, int.class },
 				NewMagicMod.MOD_ID + ":colored_bubble_particle", id, false, 1);
@@ -55,7 +75,7 @@ public class ClientProxy extends CommonProxy {
 	private static int particleId;
 
 	private static int getNextParticleId() {
-		while (EnumParticleTypes.getParticleFromId(particleId) == null)
+		while (EnumParticleTypes.getParticleFromId(particleId) != null)
 			particleId++;
 		return particleId;
 	}

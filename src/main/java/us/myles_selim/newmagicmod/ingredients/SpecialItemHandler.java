@@ -1,4 +1,4 @@
-package us.myles_selim.newmagicmod.items;
+package us.myles_selim.newmagicmod.ingredients;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;

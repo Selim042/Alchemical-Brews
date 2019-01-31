@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.ModRegistry;
-import us.myles_selim.newmagicmod.items.SpecialItemHandler;
+import us.myles_selim.newmagicmod.ingredients.SpecialItemHandler;
 
 @Mod.EventBusSubscriber
 public class FriedNetherCocoaIngredient extends SpecialStackSpellIngredient {
@@ -49,7 +49,7 @@ public class FriedNetherCocoaIngredient extends SpecialStackSpellIngredient {
 			ItemStack stack = entity.getItem().copy();
 			ItemStack newStack = ItemStack.EMPTY;
 			if (stack.getItem() == Items.DYE && stack.getMetadata() == 3)
-				newStack = ModRegistry.Ingredients.FRIED_NETHER_COCOA.getStack();
+				newStack = ModRegistry.ModIngredients.FRIED_NETHER_COCOA.getStack();
 			entity.setItem(newStack);
 			return true;
 		}

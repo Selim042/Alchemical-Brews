@@ -50,7 +50,7 @@ public class ChickenFeatherIngredient extends SpecialStackSpellIngredient {
 					&& event.getSource().getTrueSource() instanceof EntitySkeleton)
 				for (EntityItem ei : event.getDrops())
 					if (ei.getItem().getItem().equals(Items.FEATHER))
-						ei.setItem(ModRegistry.Ingredients.CHICKEN_FEATHER.getStack());
+						ei.setItem(ModRegistry.ModIngredients.CHICKEN_FEATHER.getStack());
 		}
 	}
 

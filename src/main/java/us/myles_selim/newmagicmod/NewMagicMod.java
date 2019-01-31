@@ -2,6 +2,8 @@ package us.myles_selim.newmagicmod;
 
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -30,7 +32,14 @@ public class NewMagicMod {
 			serverSide = "us.myles_selim.newmagicmod.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
-	public static final StackIngCreativeTab CREATIVE_TAB = new StackIngCreativeTab();
+	public static final StackIngCreativeTab INGREDIENT_TAB = new StackIngCreativeTab();
+	public static final CreativeTabs RESULTS_TAB = new CreativeTabs(NewMagicMod.MOD_ID + "_results") {
+
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(ModRegistry.ModItems.SPAWN_POTION);
+		}
+	};
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

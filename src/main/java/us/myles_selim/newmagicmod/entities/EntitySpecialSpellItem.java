@@ -6,7 +6,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import us.myles_selim.newmagicmod.items.SpecialItemHandler;
+import us.myles_selim.newmagicmod.ingredients.SpecialItemHandler;
 
 public class EntitySpecialSpellItem extends EntityItem {
 

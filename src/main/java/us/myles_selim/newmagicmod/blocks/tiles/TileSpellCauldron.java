@@ -20,10 +20,10 @@ import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.newmagicmod.ModRegistry;
-import us.myles_selim.newmagicmod.ModRegistry.Registries;
 import us.myles_selim.newmagicmod.blocks.BlockSpellCauldron;
 import us.myles_selim.newmagicmod.ingredients.SpellIngredient;
 import us.myles_selim.newmagicmod.ingredients.stack.special.SpecialStackSpellIngredient;
+import us.myles_selim.newmagicmod.recipes.ISpellRecipe;
 import us.myles_selim.newmagicmod.utils.ColorUtils;
 import us.myles_selim.newmagicmod.utils.MiscUtils;
 import us.myles_selim.newmagicmod.utils.VanillaPacketDispatcher;
@@ -83,7 +83,7 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 
 	protected boolean updateCauldron() {
 		if (this.world != null && !this.world.isRemote) {
-			if (this.transferCooldown <= 0 && pickupIngredients(this)) {
+			if (this.transferCooldown <= 0 && ingredients.size() < 16 && pickupIngredients(this)) {
 				this.transferCooldown = 8;
 				this.markDirty();
 				VanillaPacketDispatcher.dispatchTEToNearbyPlayers(getWorld(), getPos());
@@ -97,24 +97,38 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 
 	private static boolean pickupIngredients(TileSpellCauldron cauldron) {
 		BlockPos pos = cauldron.getPos();
-		boolean pickedUp = false;
 		for (EntityItem ei : getCaptureIngredients(cauldron.getWorld(), pos.getX(), pos.getY(),
 				pos.getZ())) {
 			ItemStack stack = ei.getItem();
+			for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
+				if (r.matches(cauldron.ingredients) && ItemStack.areItemsEqual(r.getCatalyst(), stack)) {
+					r.executeResult(cauldron.getWorld(), ei.getOwner() == null ? null
+							: cauldron.getWorld().getPlayerEntityByName(ei.getOwner()), pos);
+					ei.setDead();
+					cauldron.ingredients.clear();
+					cauldron.world.setBlockState(cauldron.pos,
+							ModRegistry.ModBlocks.SPELL_CAULDRON.getDefaultState());
+					return true;
+				}
+			}
+			if (!SpecialStackSpellIngredient.isSpecialSpellIngredient(stack))
+				continue;
 			SpecialStackSpellIngredient ing = SpecialStackSpellIngredient.getIngredient(stack);
+			if (ing == null)
+				return false;
 			for (int i = 0; i < stack.getCount(); i++)
 				cauldron.ingredients.add(ing);
 			ei.setDead();
-			pickedUp = true;
+			return true;
 		}
-		return pickedUp;
+		return false;
 	}
 
 	private static List<EntityItem> getCaptureIngredients(World worldIn, double xPos, double yPos,
 			double zPos) {
 		return worldIn.<EntityItem>getEntitiesWithinAABB(EntityItem.class,
 				new AxisAlignedBB(xPos - 0.5D, yPos, zPos - 0.5D, xPos + 0.5D, yPos + 1.5D, zPos + 0.5D),
-				(EntityItem ei) -> SpecialStackSpellIngredient.isSpecialSpellIngredient(ei.getItem()));
+				(EntityItem ei) -> true);
 	}
 
 	@Override
@@ -144,7 +158,7 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 		this.ingredients.clear();
 		NBTTagCompound ings = nbt.getCompoundTag("ingredients");
 		for (String k : ings.getKeySet())
-			this.ingredients.add(ModRegistry.Registries.SPELL_INGREDIENTS
+			this.ingredients.add(ModRegistry.ModRegistries.SPELL_INGREDIENTS
 					.getValue(new ResourceLocation(ings.getString(k))));
 		this.transferCooldown = nbt.getInteger("transferCooldown");
 		super.readFromNBT(nbt);

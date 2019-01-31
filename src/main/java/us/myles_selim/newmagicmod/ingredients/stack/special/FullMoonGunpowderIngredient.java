@@ -49,7 +49,7 @@ public class FullMoonGunpowderIngredient extends SpecialStackSpellIngredient {
 			if (MiscUtils.isFullMoon(living.world))
 				for (EntityItem ei : event.getDrops())
 					if (ei.getItem().getItem().equals(Items.GUNPOWDER))
-						ei.setItem(ModRegistry.Ingredients.FULL_MOON_GUNPOWDER.getStack());
+						ei.setItem(ModRegistry.ModIngredients.FULL_MOON_GUNPOWDER.getStack());
 	}
 
 }
