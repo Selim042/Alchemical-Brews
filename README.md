@@ -1,1 +1,1 @@
-# New-Magic-Mod
+# Alchemical Brews
