@@ -1,7 +1,7 @@
 [
 {
-  "modid": "newmagicmod",
-  "name": "New Magic Mod",
+  "modid": "alchemical_brews",
+  "name": "Alchemical Brews",
   "description": "A magic mod centered around making spells in cauldrons with very specific ingredients.",
   "version": "${version}",
   "mcversion": "${mcversion}",

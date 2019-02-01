@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "alchemical_brews:blocks/gardening_lamp_on"
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "is_full=false": { "model": "alchemical_brews:spell_cauldron_empty" },
+        "is_full=true": { "model": "alchemical_brews:spell_cauldron_full" }
+    }
+}

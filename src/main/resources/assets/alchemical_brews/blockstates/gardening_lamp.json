@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "is_on=false": { "model": "alchemical_brews:gardening_lamp_off" },
+        "is_on=true": { "model": "alchemical_brews:gardening_lamp_on" }
+    }
+}
