@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.alchemical_brews.AlchemicalBrews;
 import us.myles_selim.alchemical_brews.ModRegistry;
-import us.myles_selim.alchemical_brews.blocks.tiles.TileSpellCauldron;
+import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.particles.ParticleColoredBubble;
 
 @SideOnly(Side.CLIENT)
@@ -44,9 +44,9 @@ public class ClientProxy extends CommonProxy {
 			public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos,
 					int tintIndex) {
 				TileEntity te = worldIn.getTileEntity(pos);
-				if (te == null || !(te instanceof TileSpellCauldron))
+				if (te == null || !(te instanceof TileBrewingCauldron))
 					return 0;
-				return ((TileSpellCauldron) te).getWaterColor();
+				return ((TileBrewingCauldron) te).getWaterColor();
 			}
 		}, ModRegistry.ModBlocks.SPELL_CAULDRON);
 	}

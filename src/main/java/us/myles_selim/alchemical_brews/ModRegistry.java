@@ -16,7 +16,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import us.myles_selim.alchemical_brews.blocks.BlockGardeningLamp;
 import us.myles_selim.alchemical_brews.blocks.BlockSpellCauldron;
-import us.myles_selim.alchemical_brews.blocks.tiles.TileSpellCauldron;
+import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.SpecialItemHandler;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
 import us.myles_selim.alchemical_brews.ingredients.stack.special.ChickenFeatherIngredient;
@@ -131,7 +131,7 @@ public class ModRegistry {
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> registry = event.getRegistry();
 		registry.register(ModBlocks.SPELL_CAULDRON);
-		GameRegistry.registerTileEntity(TileSpellCauldron.class, new ResourceLocation("spell_cauldron"));
+		GameRegistry.registerTileEntity(TileBrewingCauldron.class, new ResourceLocation("spell_cauldron"));
 		registry.register(ModBlocks.GARDENING_LAMP);
 	}
 

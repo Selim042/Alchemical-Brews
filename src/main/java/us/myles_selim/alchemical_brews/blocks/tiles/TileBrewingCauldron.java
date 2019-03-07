@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -13,28 +13,28 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.alchemical_brews.ModRegistry;
 import us.myles_selim.alchemical_brews.blocks.BlockSpellCauldron;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
-import us.myles_selim.alchemical_brews.ingredients.stack.special.SpecialStackSpellIngredient;
+import us.myles_selim.alchemical_brews.ingredients.events.CauldronIngredientUpdateEvent;
 import us.myles_selim.alchemical_brews.recipes.ISpellRecipe;
 import us.myles_selim.alchemical_brews.utils.ColorUtils;
 import us.myles_selim.alchemical_brews.utils.MiscUtils;
 import us.myles_selim.alchemical_brews.utils.VanillaPacketDispatcher;
 
-public class TileSpellCauldron extends TileEntity implements ITickable {
+public class TileBrewingCauldron extends TileEntity implements ITickable {
 
+	private final List<ItemStack> failedCatalysts = new ArrayList<>();
 	private final List<SpellIngredient> ingredients;
 	private BlockPos waterSource;
 	private int transferCooldown = -1;
 
-	public TileSpellCauldron() {
+	public TileBrewingCauldron() {
 		this.ingredients = new ArrayList<>();
 	}
 
@@ -44,6 +44,30 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 
 	public List<SpellIngredient> getIngredients() {
 		return ingredients;
+	}
+
+	public boolean checkCatalyst(EntityPlayer player, ItemStack stack) {
+		if (failedCatalysts.contains(stack))
+			return false;
+		for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
+			if (r.matches(getIngredients()) && ItemStack.areItemsEqual(r.getCatalyst(), stack)) {
+				r.executeResult(getWorld(), player, pos);
+				getIngredients().clear();
+				getWorld().setBlockState(getPos(),
+						ModRegistry.ModBlocks.SPELL_CAULDRON.getDefaultState());
+				return true;
+			}
+		}
+		failedCatalysts.add(stack);
+		return false;
+	}
+
+	public boolean addIngredient(EntityPlayer player, SpellIngredient ing) {
+		if (ingredients.add(ing)) {
+			failedCatalysts.clear();
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isBoiling() {
@@ -83,7 +107,7 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 
 	protected boolean updateCauldron() {
 		if (this.world != null && !this.world.isRemote) {
-			if (this.transferCooldown <= 0 && ingredients.size() < 16 && pickupIngredients(this)) {
+			if (this.transferCooldown <= 0 && ingredients.size() < 16 && updateIngredients(this)) {
 				this.transferCooldown = 8;
 				this.markDirty();
 				VanillaPacketDispatcher.dispatchTEToNearbyPlayers(getWorld(), getPos());
@@ -95,40 +119,10 @@ public class TileSpellCauldron extends TileEntity implements ITickable {
 			return false;
 	}
 
-	private static boolean pickupIngredients(TileSpellCauldron cauldron) {
-		BlockPos pos = cauldron.getPos();
-		for (EntityItem ei : getCaptureIngredients(cauldron.getWorld(), pos.getX(), pos.getY(),
-				pos.getZ())) {
-			ItemStack stack = ei.getItem();
-			for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
-				if (r.matches(cauldron.ingredients) && ItemStack.areItemsEqual(r.getCatalyst(), stack)) {
-					r.executeResult(cauldron.getWorld(), ei.getOwner() == null ? null
-							: cauldron.getWorld().getPlayerEntityByName(ei.getOwner()), pos);
-					ei.setDead();
-					cauldron.ingredients.clear();
-					cauldron.world.setBlockState(cauldron.pos,
-							ModRegistry.ModBlocks.SPELL_CAULDRON.getDefaultState());
-					return true;
-				}
-			}
-			if (!SpecialStackSpellIngredient.isSpecialSpellIngredient(stack))
-				continue;
-			SpecialStackSpellIngredient ing = SpecialStackSpellIngredient.getIngredient(stack);
-			if (ing == null)
-				return false;
-			for (int i = 0; i < stack.getCount(); i++)
-				cauldron.ingredients.add(ing);
-			ei.setDead();
-			return true;
-		}
-		return false;
-	}
-
-	private static List<EntityItem> getCaptureIngredients(World worldIn, double xPos, double yPos,
-			double zPos) {
-		return worldIn.<EntityItem>getEntitiesWithinAABB(EntityItem.class,
-				new AxisAlignedBB(xPos - 0.5D, yPos, zPos - 0.5D, xPos + 0.5D, yPos + 1.5D, zPos + 0.5D),
-				(EntityItem ei) -> true);
+	private static boolean updateIngredients(TileBrewingCauldron cauldron) {
+		CauldronIngredientUpdateEvent event = new CauldronIngredientUpdateEvent(cauldron);
+		MinecraftForge.EVENT_BUS.post(event);
+		return event.isChanged();
 	}
 
 	@Override

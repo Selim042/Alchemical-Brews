@@ -16,10 +16,8 @@ public interface ISpellRecipe extends IForgeRegistryEntry<ISpellRecipe> {
 	public List<SpellIngredient> getIngredients();
 
 	public default boolean matches(List<SpellIngredient> ingredients) {
-		if (getIngredients().size() != ingredients.size())
-			return false;
 		for (SpellIngredient ing : getIngredients())
-			if (!ingredients.contains(ing))
+			if (!ingredients.contains(ing) && ing.isStrict())
 				return false;
 		return true;
 	}

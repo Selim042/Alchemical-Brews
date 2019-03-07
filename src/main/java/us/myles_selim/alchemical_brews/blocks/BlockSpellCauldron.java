@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.alchemical_brews.AlchemicalBrews;
 import us.myles_selim.alchemical_brews.ModRegistry;
-import us.myles_selim.alchemical_brews.blocks.tiles.TileSpellCauldron;
+import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
 import us.myles_selim.alchemical_brews.recipes.ISpellRecipe;
 
@@ -69,14 +69,14 @@ public class BlockSpellCauldron extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileSpellCauldron();
+		return new TileBrewingCauldron();
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		TileEntity te = worldIn.getTileEntity(pos);
-		if (!(te instanceof TileSpellCauldron) || !((TileSpellCauldron) te).isBoiling())
+		if (!(te instanceof TileBrewingCauldron) || !((TileBrewingCauldron) te).isBoiling())
 			return;
 		double x = (double) pos.getX() + 0.5D;
 		double y = (double) pos.getY() + 0.25D;
@@ -91,7 +91,7 @@ public class BlockSpellCauldron extends BlockContainer {
 							&& rand.nextFloat() > ((mc.gameSettings.particleSetting + 1) * 0.15f))
 						worldIn.spawnParticle(ModRegistry.ModParticles.COLORED_BUBBLE_PARTICLE, x + offX,
 								y + offY, z + offZ, rand.nextFloat() / 10, 0.25D - rand.nextFloat() / 4,
-								rand.nextFloat() / 10, ((TileSpellCauldron) te).getWaterColor());
+								rand.nextFloat() / 10, ((TileBrewingCauldron) te).getWaterColor());
 		// worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D,
 		// 0.0D, 0.0D);
 	}
@@ -101,7 +101,7 @@ public class BlockSpellCauldron extends BlockContainer {
 			EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY,
 			float hitZ) {
 		ItemStack stack = playerIn.getHeldItem(hand);
-		TileSpellCauldron cauldron = (TileSpellCauldron) worldIn.getTileEntity(pos);
+		TileBrewingCauldron cauldron = (TileBrewingCauldron) worldIn.getTileEntity(pos);
 		if (worldIn.isRemote) {
 			for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
 				playerIn.sendStatusMessage(new TextComponentString(r.getRegistryName().toString()),

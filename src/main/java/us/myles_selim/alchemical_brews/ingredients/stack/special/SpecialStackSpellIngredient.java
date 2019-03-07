@@ -50,9 +50,9 @@ public abstract class SpecialStackSpellIngredient extends SpellIngredient {
 		return false;
 	}
 
-	public String getNBTKey() {
-		return AlchemicalBrews.MOD_ID + ":" + this.getRegistryName().getResourcePath();
-	}
+//	public String getNBTKey() {
+//		return AlchemicalBrews.MOD_ID + ":" + this.getRegistryName().getResourcePath();
+//	}
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
