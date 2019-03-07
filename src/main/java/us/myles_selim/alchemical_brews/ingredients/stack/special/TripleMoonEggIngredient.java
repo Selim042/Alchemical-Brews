@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.alchemical_brews.AlchemicalBrews;
 import us.myles_selim.alchemical_brews.ingredients.SpecialItemHandler;
+import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngredient;
 import us.myles_selim.alchemical_brews.utils.MiscUtils;
 
 @Mod.EventBusSubscriber

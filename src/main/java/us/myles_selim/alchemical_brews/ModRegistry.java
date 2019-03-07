@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import us.myles_selim.alchemical_brews.blocks.BlockGardeningLamp;
-import us.myles_selim.alchemical_brews.blocks.BlockSpellCauldron;
+import us.myles_selim.alchemical_brews.blocks.BlockBrewingCauldron;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.SpecialItemHandler;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
@@ -23,9 +23,10 @@ import us.myles_selim.alchemical_brews.ingredients.stack.special.ChickenFeatherI
 import us.myles_selim.alchemical_brews.ingredients.stack.special.FriedNetherCocoaIngredient;
 import us.myles_selim.alchemical_brews.ingredients.stack.special.FullMoonGunpowderIngredient;
 import us.myles_selim.alchemical_brews.ingredients.stack.special.JebWoolIngredient;
-import us.myles_selim.alchemical_brews.ingredients.stack.special.SpecialStackSpellIngredient;
 import us.myles_selim.alchemical_brews.ingredients.stack.special.StrayBoneIngredient;
 import us.myles_selim.alchemical_brews.ingredients.stack.special.TripleMoonEggIngredient;
+import us.myles_selim.alchemical_brews.ingredients.types.BlockSpellIngredient;
+import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngredient;
 import us.myles_selim.alchemical_brews.items.ItemSpawnPotion;
 import us.myles_selim.alchemical_brews.recipes.ISpellRecipe;
 import us.myles_selim.alchemical_brews.recipes.StackSpellRecipe;
@@ -55,12 +56,21 @@ public class ModRegistry {
 		public static final SpecialStackSpellIngredient JEB_WOOL = new JebWoolIngredient();
 		public static final SpecialStackSpellIngredient STRAY_BONE = new StrayBoneIngredient();
 
+		public static final BlockSpellIngredient DIAMOND_ORE = new BlockSpellIngredient("diamond_ore",
+				Blocks.DIAMOND_ORE.getDefaultState()) {
+
+			@Override
+			public int getIngredientColor() {
+				return 0x3BD6C6;
+			}
+		};
+
 	}
 
 	@GameRegistry.ObjectHolder(AlchemicalBrews.MOD_ID)
 	public static class ModBlocks {
 
-		public static final Block SPELL_CAULDRON = new BlockSpellCauldron();
+		public static final Block SPELL_CAULDRON = new BlockBrewingCauldron();
 		public static final Block GARDENING_LAMP = new BlockGardeningLamp();
 
 	}
@@ -105,6 +115,8 @@ public class ModRegistry {
 		// registry.register(Ingredients.END_DIAMOND);
 		registry.register(ModIngredients.JEB_WOOL);
 		registry.register(ModIngredients.STRAY_BONE);
+
+		registry.register(ModIngredients.DIAMOND_ORE);
 	}
 
 	@SubscribeEvent
@@ -125,13 +137,18 @@ public class ModRegistry {
 		registry.register(new StackSpellRecipe(new ItemStack(ModItems.GARDENING_LAMP),
 				new ItemStack(Blocks.REDSTONE_LAMP), ModIngredients.STRAY_BONE,
 				ModIngredients.STRAY_BONE, ModIngredients.STRAY_BONE).setRegistryName("gardening_lamp"));
+
+		registry.register(
+				new StackSpellRecipe(new ItemStack(Blocks.DIAMOND_BLOCK), new ItemStack(Items.DIAMOND),
+						ModIngredients.DIAMOND_ORE).setRegistryName("diamond_block"));
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> registry = event.getRegistry();
 		registry.register(ModBlocks.SPELL_CAULDRON);
-		GameRegistry.registerTileEntity(TileBrewingCauldron.class, new ResourceLocation("spell_cauldron"));
+		GameRegistry.registerTileEntity(TileBrewingCauldron.class,
+				new ResourceLocation("spell_cauldron"));
 		registry.register(ModBlocks.GARDENING_LAMP);
 	}
 

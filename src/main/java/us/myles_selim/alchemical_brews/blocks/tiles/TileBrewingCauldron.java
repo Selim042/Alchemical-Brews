@@ -19,7 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.alchemical_brews.ModRegistry;
-import us.myles_selim.alchemical_brews.blocks.BlockSpellCauldron;
+import us.myles_selim.alchemical_brews.blocks.BlockBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
 import us.myles_selim.alchemical_brews.ingredients.events.CauldronIngredientUpdateEvent;
 import us.myles_selim.alchemical_brews.recipes.ISpellRecipe;
@@ -52,6 +52,8 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 		for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
 			if (r.matches(getIngredients()) && ItemStack.areItemsEqual(r.getCatalyst(), stack)) {
 				r.executeResult(getWorld(), player, pos);
+				for (SpellIngredient ing : getIngredients())
+					ing.onCraft(this);
 				getIngredients().clear();
 				getWorld().setBlockState(getPos(),
 						ModRegistry.ModBlocks.SPELL_CAULDRON.getDefaultState());
@@ -72,7 +74,7 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 
 	public boolean isBoiling() {
 		IBlockState state = world.getBlockState(getPos());
-		return state.getValue(BlockSpellCauldron.IS_FULL)
+		return state.getValue(BlockBrewingCauldron.IS_FULL)
 				&& world.getBlockState(getPos().down()).getBlock() instanceof BlockFire;
 	}
 
@@ -107,7 +109,7 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 
 	protected boolean updateCauldron() {
 		if (this.world != null && !this.world.isRemote) {
-			if (this.transferCooldown <= 0 && ingredients.size() < 16 && updateIngredients(this)) {
+			if (this.transferCooldown <= 0 && ingredients.size() < 16 && updateIngredients()) {
 				this.transferCooldown = 8;
 				this.markDirty();
 				VanillaPacketDispatcher.dispatchTEToNearbyPlayers(getWorld(), getPos());
@@ -119,8 +121,8 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 			return false;
 	}
 
-	private static boolean updateIngredients(TileBrewingCauldron cauldron) {
-		CauldronIngredientUpdateEvent event = new CauldronIngredientUpdateEvent(cauldron);
+	public boolean updateIngredients() {
+		CauldronIngredientUpdateEvent event = new CauldronIngredientUpdateEvent(this);
 		MinecraftForge.EVENT_BUS.post(event);
 		return event.isChanged();
 	}

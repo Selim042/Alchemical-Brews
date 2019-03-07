@@ -1,4 +1,4 @@
-package us.myles_selim.alchemical_brews.ingredients.stack.special;
+package us.myles_selim.alchemical_brews.ingredients.types;
 
 import java.util.List;
 

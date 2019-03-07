@@ -4,7 +4,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
-import us.myles_selim.alchemical_brews.ingredients.stack.special.SpecialStackSpellIngredient;
+import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngredient;
 
 public class StackIngCreativeTab extends CreativeTabs {
 

@@ -42,9 +42,8 @@ import us.myles_selim.alchemical_brews.AlchemicalBrews;
 import us.myles_selim.alchemical_brews.ModRegistry;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
-import us.myles_selim.alchemical_brews.recipes.ISpellRecipe;
 
-public class BlockSpellCauldron extends BlockContainer {
+public class BlockBrewingCauldron extends BlockContainer {
 
 	public static final PropertyBool IS_FULL = PropertyBool.create("is_full");
 
@@ -59,7 +58,7 @@ public class BlockSpellCauldron extends BlockContainer {
 	protected static final AxisAlignedBB AABB_WALL_WEST = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D,
 			1.0D, 1.0D);
 
-	public BlockSpellCauldron() {
+	public BlockBrewingCauldron() {
 		super(Material.IRON, MapColor.STONE);
 		this.setHardness(2.0F);
 		this.setRegistryName("spell_cauldron");
@@ -102,26 +101,30 @@ public class BlockSpellCauldron extends BlockContainer {
 			float hitZ) {
 		ItemStack stack = playerIn.getHeldItem(hand);
 		TileBrewingCauldron cauldron = (TileBrewingCauldron) worldIn.getTileEntity(pos);
-		if (worldIn.isRemote) {
-			for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
-				playerIn.sendStatusMessage(new TextComponentString(r.getRegistryName().toString()),
-						false);
-				for (SpellIngredient ing : r.getIngredients())
-					if (ing != null)
-						playerIn.sendStatusMessage(
-								new TextComponentString(" - " + ing.getRegistryName().toString()),
-								false);
-					else
-						playerIn.sendStatusMessage(new TextComponentString(" - null ing"), false);
-			}
-			playerIn.sendStatusMessage(new TextComponentString("in cauldron"), false);
-			for (SpellIngredient ing : cauldron.getIngredients())
-				if (ing != null)
-					playerIn.sendStatusMessage(
-							new TextComponentString(" - " + ing.getRegistryName().toString()), false);
-				else
-					playerIn.sendStatusMessage(new TextComponentString(" - null ing"), false);
-		}
+//		if (worldIn.isRemote) {
+//			// for (ISpellRecipe r :
+//			// ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
+//			// playerIn.sendStatusMessage(new
+//			// TextComponentString(r.getRegistryName().toString()),
+//			// false);
+//			// for (SpellIngredient ing : r.getIngredients())
+//			// if (ing != null)
+//			// playerIn.sendStatusMessage(
+//			// new TextComponentString(" - " +
+//			// ing.getRegistryName().toString()),
+//			// false);
+//			// else
+//			// playerIn.sendStatusMessage(new TextComponentString(" - null
+//			// ing"), false);
+//			// }
+//			playerIn.sendStatusMessage(new TextComponentString("in cauldron"), false);
+//			for (SpellIngredient ing : cauldron.getIngredients())
+//				if (ing != null)
+//					playerIn.sendStatusMessage(
+//							new TextComponentString(" - " + ing.getRegistryName().toString()), false);
+//				else
+//					playerIn.sendStatusMessage(new TextComponentString(" - null ing"), false);
+//		}
 
 		if (stack.isEmpty())
 			return true;
@@ -135,6 +138,7 @@ public class BlockSpellCauldron extends BlockContainer {
 					worldIn.setBlockState(pos, state.withProperty(IS_FULL, true), 2);
 					worldIn.playSound((EntityPlayer) null, pos, SoundEvents.ITEM_BUCKET_EMPTY,
 							SoundCategory.BLOCKS, 1.0F, 1.0F);
+					cauldron.updateIngredients();
 				}
 				return true;
 			}

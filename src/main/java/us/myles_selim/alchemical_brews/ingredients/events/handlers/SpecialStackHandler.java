@@ -10,11 +10,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import us.myles_selim.alchemical_brews.AlchemicalBrews;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.events.CauldronIngredientUpdateEvent;
-import us.myles_selim.alchemical_brews.ingredients.stack.special.SpecialStackSpellIngredient;
+import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngredient;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = AlchemicalBrews.MOD_ID)
 public class SpecialStackHandler {
 
 	@SubscribeEvent
@@ -23,15 +24,18 @@ public class SpecialStackHandler {
 		BlockPos pos = cauldron.getPos();
 		for (EntityItem ei : getCaptureIngredients(cauldron.getWorld(), pos.getX(), pos.getY(),
 				pos.getZ())) {
-			EntityPlayer player = event.getWorld().getPlayerEntityByName(ei.getOwner());
+			EntityPlayer player = null;
+			if (ei.getOwner() != null)
+				player = event.getWorld().getPlayerEntityByName(ei.getOwner());
 			ItemStack stack = ei.getItem();
-			if (!SpecialStackSpellIngredient.isSpecialSpellIngredient(stack))
-				continue;
-			SpecialStackSpellIngredient ing = SpecialStackSpellIngredient.getIngredient(stack);
 			if (cauldron.checkCatalyst(player, stack)) {
+				ei.setDead();
 				event.setChanged(true);
 				return;
 			}
+			if (!SpecialStackSpellIngredient.isSpecialSpellIngredient(stack))
+				continue;
+			SpecialStackSpellIngredient ing = SpecialStackSpellIngredient.getIngredient(stack);
 			if (ing == null)
 				return;
 			for (int i = 0; i < stack.getCount(); i++)
