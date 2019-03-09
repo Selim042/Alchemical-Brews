@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import us.myles_selim.alchemical_brews.AlchemicalBrews;
+import us.myles_selim.alchemical_brews.AlchemicalConstants;
 import us.myles_selim.alchemical_brews.ModRegistry;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.particles.ParticleColoredBubble;
@@ -67,9 +67,9 @@ public class ClientProxy extends CommonProxy {
 	public static void registerParticles() {
 		int id = getNextParticleId();
 		ModRegistry.ModParticles.COLORED_BUBBLE_PARTICLE = EnumHelper.addEnum(EnumParticleTypes.class,
-				AlchemicalBrews.MOD_ID + "COLORED_BUBBLE_PARTICLE",
+				AlchemicalConstants.MOD_ID + "COLORED_BUBBLE_PARTICLE",
 				new Class[] { String.class, int.class, boolean.class, int.class },
-				AlchemicalBrews.MOD_ID + ":colored_bubble_particle", id, false, 1);
+				AlchemicalConstants.MOD_ID + ":colored_bubble_particle", id, false, 1);
 		Minecraft.getMinecraft().effectRenderer.registerParticle(id,
 				new ParticleColoredBubble.Factory());
 	}

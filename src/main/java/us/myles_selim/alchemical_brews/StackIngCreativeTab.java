@@ -9,7 +9,7 @@ import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngred
 public class StackIngCreativeTab extends CreativeTabs {
 
 	public StackIngCreativeTab() {
-		super(AlchemicalBrews.MOD_ID + "_ingredients");
+		super(AlchemicalConstants.MOD_ID + "_ingredients");
 	}
 
 	@Override

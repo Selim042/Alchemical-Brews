@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import us.myles_selim.alchemical_brews.AlchemicalBrews;
+import us.myles_selim.alchemical_brews.AlchemicalConstants;
 import us.myles_selim.alchemical_brews.ingredients.SpecialItemHandler;
 import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngredient;
 import us.myles_selim.alchemical_brews.utils.MiscUtils;
@@ -19,8 +19,8 @@ import us.myles_selim.alchemical_brews.utils.MiscUtils;
 @Mod.EventBusSubscriber
 public class TripleMoonEggIngredient extends SpecialStackSpellIngredient {
 
-	private static final String MOON_COUNTER = AlchemicalBrews.MOD_ID + "_egg_moons";
-	private static final String MOON_TIMER = AlchemicalBrews.MOD_ID + "_egg_time";
+	private static final String MOON_COUNTER = AlchemicalConstants.MOD_ID + "_egg_moons";
+	private static final String MOON_TIMER = AlchemicalConstants.MOD_ID + "_egg_time";
 
 	public TripleMoonEggIngredient() {
 		super("triple_moon_egg");
@@ -86,7 +86,7 @@ public class TripleMoonEggIngredient extends SpecialStackSpellIngredient {
 			nbt.setInteger(MOON_COUNTER, ++moons);
 			nbt.setInteger(MOON_TIMER, (int) (world.getWorldTime() / 24000));
 			nbt.setString(SpecialStackSpellIngredient.INGREDIENT_KEY,
-					AlchemicalBrews.MOD_ID + ":tripple_moon_egg");
+					AlchemicalConstants.MOD_ID + ":tripple_moon_egg");
 			return true;
 		}
 

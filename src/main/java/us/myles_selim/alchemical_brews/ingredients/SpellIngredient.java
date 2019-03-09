@@ -24,6 +24,10 @@ public abstract class SpellIngredient extends IForgeRegistryEntry.Impl<SpellIngr
 		return true;
 	}
 
-	public void onCraft(TileBrewingCauldron cauldron) {}
+	public void onCraft(TileBrewingCauldron cauldron, IngredientStack stack) {}
+
+	public boolean equals(IngredientStack stackA, IngredientStack stackB) {
+		return stackA.getIngredient().equals(stackB.getIngredient());
+	}
 
 }

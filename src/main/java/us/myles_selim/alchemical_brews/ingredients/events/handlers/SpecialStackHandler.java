@@ -10,12 +10,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import us.myles_selim.alchemical_brews.AlchemicalBrews;
+import us.myles_selim.alchemical_brews.AlchemicalConstants;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
+import us.myles_selim.alchemical_brews.ingredients.IngredientStack;
 import us.myles_selim.alchemical_brews.ingredients.events.CauldronIngredientUpdateEvent;
 import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngredient;
 
-@Mod.EventBusSubscriber(modid = AlchemicalBrews.MOD_ID)
+@Mod.EventBusSubscriber(modid = AlchemicalConstants.MOD_ID)
 public class SpecialStackHandler {
 
 	@SubscribeEvent
@@ -39,7 +40,7 @@ public class SpecialStackHandler {
 			if (ing == null)
 				return;
 			for (int i = 0; i < stack.getCount(); i++)
-				cauldron.addIngredient(player, ing);
+				cauldron.addIngredient(player, new IngredientStack(ing));
 			ei.setDead();
 			event.setChanged(true);
 			return;

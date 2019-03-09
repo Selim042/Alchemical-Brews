@@ -12,19 +12,29 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import us.myles_selim.alchemical_brews.entities.EntitySpecialSpellItem;
+import us.myles_selim.alchemical_brews.network.BiomeUpdateMessage;
+import us.myles_selim.alchemical_brews.network.BiomeUpdateMessage.BiomeUpdateMessageHandler;
 import us.myles_selim.alchemical_brews.proxy.CommonProxy;
 
-@Mod(modid = AlchemicalBrews.MOD_ID, name = AlchemicalBrews.NAME, version = AlchemicalBrews.VERSION)
+@Mod(modid = AlchemicalConstants.MOD_ID, name = AlchemicalConstants.NAME,
+		version = AlchemicalConstants.VERSION)
 public class AlchemicalBrews {
 
-	public static final String MOD_ID = "alchemical_brews";
-	public static final String NAME = "Alchemical Brews";
-	public static final String VERSION = "1.0.0";
 	public static Logger logger;
+	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE
+			.newSimpleChannel(AlchemicalConstants.MOD_ID);
 
-	@Instance(MOD_ID)
+	static {
+		NETWORK.registerMessage(BiomeUpdateMessageHandler.class, BiomeUpdateMessage.class,
+				AlchemicalConstants.Discriminators.BIOME_UPDATE, Side.CLIENT);
+	}
+
+	@Instance(AlchemicalConstants.MOD_ID)
 	public static AlchemicalBrews instance;
 
 	@SidedProxy(clientSide = "us.myles_selim.alchemical_brews.proxy.ClientProxy",
@@ -33,7 +43,7 @@ public class AlchemicalBrews {
 
 	public static final StackIngCreativeTab INGREDIENT_TAB = new StackIngCreativeTab();
 	public static final CreativeTabs RESULTS_TAB = new CreativeTabs(
-			AlchemicalBrews.MOD_ID + "_results") {
+			AlchemicalConstants.MOD_ID + "_results") {
 
 		@Override
 		public ItemStack getTabIconItem() {
@@ -46,7 +56,8 @@ public class AlchemicalBrews {
 		proxy.preInit(event);
 		logger = event.getModLog();
 
-		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "special_spell_item"),
+		EntityRegistry.registerModEntity(
+				new ResourceLocation(AlchemicalConstants.MOD_ID, "special_spell_item"),
 				EntitySpecialSpellItem.class, "special_spell_item", 0, instance, 64, 10, true);
 	}
 

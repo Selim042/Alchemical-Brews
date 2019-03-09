@@ -12,7 +12,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.myles_selim.alchemical_brews.ModRegistry;
 import us.myles_selim.alchemical_brews.blocks.BlockBrewingCauldron;
-import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
+import us.myles_selim.alchemical_brews.ingredients.IngredientStack;
 import us.myles_selim.alchemical_brews.ingredients.events.CauldronIngredientUpdateEvent;
 import us.myles_selim.alchemical_brews.recipes.ISpellRecipe;
 import us.myles_selim.alchemical_brews.utils.ColorUtils;
@@ -30,7 +29,7 @@ import us.myles_selim.alchemical_brews.utils.VanillaPacketDispatcher;
 public class TileBrewingCauldron extends TileEntity implements ITickable {
 
 	private final List<ItemStack> failedCatalysts = new ArrayList<>();
-	private final List<SpellIngredient> ingredients;
+	private final List<IngredientStack> ingredients;
 	private BlockPos waterSource;
 	private int transferCooldown = -1;
 
@@ -42,7 +41,7 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 		return waterSource;
 	}
 
-	public List<SpellIngredient> getIngredients() {
+	public List<IngredientStack> getIngredients() {
 		return ingredients;
 	}
 
@@ -51,9 +50,9 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 			return false;
 		for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
 			if (r.matches(getIngredients()) && ItemStack.areItemsEqual(r.getCatalyst(), stack)) {
-				r.executeResult(getWorld(), player, pos);
-				for (SpellIngredient ing : getIngredients())
-					ing.onCraft(this);
+				r.executeResult(getWorld(), player, pos, getIngredients());
+				for (IngredientStack ing : getIngredients())
+					ing.getIngredient().onCraft(this, ing);
 				getIngredients().clear();
 				getWorld().setBlockState(getPos(),
 						ModRegistry.ModBlocks.SPELL_CAULDRON.getDefaultState());
@@ -64,7 +63,7 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 		return false;
 	}
 
-	public boolean addIngredient(EntityPlayer player, SpellIngredient ing) {
+	public boolean addIngredient(EntityPlayer player, IngredientStack ing) {
 		if (ingredients.add(ing)) {
 			failedCatalysts.clear();
 			return true;
@@ -87,7 +86,8 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 		int b = waterColor[2];
 		int numIng = 1;
 		for (int i = 0; i < ingredients.size(); i++) {
-			int[] color = ColorUtils.rgbToIndInts(ingredients.get(i).getIngredientColor());
+			int[] color = ColorUtils
+					.rgbToIndInts(ingredients.get(i).getIngredient().getIngredientColor());
 			r += color[0];
 			g += color[1];
 			b += color[2];
@@ -154,8 +154,9 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 		this.ingredients.clear();
 		NBTTagCompound ings = nbt.getCompoundTag("ingredients");
 		for (String k : ings.getKeySet())
-			this.ingredients.add(ModRegistry.ModRegistries.SPELL_INGREDIENTS
-					.getValue(new ResourceLocation(ings.getString(k))));
+			this.ingredients.add(new IngredientStack(ings.getCompoundTag(k)));
+		// ModRegistry.ModRegistries.SPELL_INGREDIENTS.getValue(new
+		// ResourceLocation(ings.getString(k))))
 		this.transferCooldown = nbt.getInteger("transferCooldown");
 		super.readFromNBT(nbt);
 	}
@@ -166,7 +167,8 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 		NBTTagCompound ings = new NBTTagCompound();
 		for (int i = 0; ingredients != null && i < ingredients.size(); i++)
 			if (ingredients.get(i) != null)
-				ings.setString(Integer.toString(i), ingredients.get(i).getRegistryName().toString());
+				ings.setTag(Integer.toString(i), ingredients.get(i).serialize());
+		// ingredients.get(i).getIngredient().getRegistryName().toString());
 		nbt.setTag("ingredients", ings);
 		nbt.setInteger("transferCooldown", this.transferCooldown);
 		return super.writeToNBT(nbt);

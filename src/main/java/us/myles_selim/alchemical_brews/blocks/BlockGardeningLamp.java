@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import us.myles_selim.alchemical_brews.AlchemicalBrews;
+import us.myles_selim.alchemical_brews.AlchemicalConstants;
 
 public class BlockGardeningLamp extends Block {
 
@@ -25,7 +26,7 @@ public class BlockGardeningLamp extends Block {
 		super(Material.REDSTONE_LIGHT);
 		this.setRegistryName("gardening_lamp");
 		this.setHardness(0.3F);
-		this.setUnlocalizedName(AlchemicalBrews.MOD_ID + ".gardening_lamp");
+		this.setUnlocalizedName(AlchemicalConstants.MOD_ID + ".gardening_lamp");
 		this.setCreativeTab(AlchemicalBrews.RESULTS_TAB);
 		this.setTickRandomly(true);
 	}

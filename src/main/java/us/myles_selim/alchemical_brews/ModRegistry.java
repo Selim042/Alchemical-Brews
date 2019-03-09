@@ -1,22 +1,33 @@
 package us.myles_selim.alchemical_brews;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockMobSpawner;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
-import us.myles_selim.alchemical_brews.blocks.BlockGardeningLamp;
 import us.myles_selim.alchemical_brews.blocks.BlockBrewingCauldron;
+import us.myles_selim.alchemical_brews.blocks.BlockGardeningLamp;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
+import us.myles_selim.alchemical_brews.ingredients.IngredientStack;
 import us.myles_selim.alchemical_brews.ingredients.SpecialItemHandler;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
 import us.myles_selim.alchemical_brews.ingredients.stack.special.ChickenFeatherIngredient;
@@ -42,7 +53,7 @@ public class ModRegistry {
 
 	}
 
-	@GameRegistry.ObjectHolder(AlchemicalBrews.MOD_ID)
+	@GameRegistry.ObjectHolder(AlchemicalConstants.MOD_ID)
 	public static class ModIngredients {
 
 		public static final SpecialStackSpellIngredient FULL_MOON_GUNPOWDER = new FullMoonGunpowderIngredient();
@@ -65,9 +76,21 @@ public class ModRegistry {
 			}
 		};
 
+		public static final BlockSpellIngredient SPAWNER = new BlockSpellIngredient("spawner",
+				Blocks.MOB_SPAWNER.getDefaultState()) {
+
+			@Override
+			public int getIngredientColor() {
+				return 0x778899;
+			}
+
+			@Override
+			public void onCraft(TileBrewingCauldron cauldron, IngredientStack stack) {}
+		};
+
 	}
 
-	@GameRegistry.ObjectHolder(AlchemicalBrews.MOD_ID)
+	@GameRegistry.ObjectHolder(AlchemicalConstants.MOD_ID)
 	public static class ModBlocks {
 
 		public static final Block SPELL_CAULDRON = new BlockBrewingCauldron();
@@ -75,7 +98,7 @@ public class ModRegistry {
 
 	}
 
-	@GameRegistry.ObjectHolder(AlchemicalBrews.MOD_ID)
+	@GameRegistry.ObjectHolder(AlchemicalConstants.MOD_ID)
 	public static class ModItems {
 
 		public static final ItemBlock SPELL_CAULDRON = null;
@@ -94,12 +117,13 @@ public class ModRegistry {
 	public static void registerCommonRegistries(RegistryEvent.NewRegistry event) {
 		ModRegistries.SPELL_INGREDIENTS = new RegistryBuilder<SpellIngredient>()
 				.setType(SpellIngredient.class)
-				.setName(new ResourceLocation(AlchemicalBrews.MOD_ID, "spell_ingredients")).create();
+				.setName(new ResourceLocation(AlchemicalConstants.MOD_ID, "spell_ingredients")).create();
 		ModRegistries.SPECIAL_ITEM_HANDLERS = new RegistryBuilder<SpecialItemHandler>()
 				.setType(SpecialItemHandler.class)
-				.setName(new ResourceLocation(AlchemicalBrews.MOD_ID, "special_item_handlers")).create();
+				.setName(new ResourceLocation(AlchemicalConstants.MOD_ID, "special_item_handlers"))
+				.create();
 		ModRegistries.SPELL_RECIPES = new RegistryBuilder<ISpellRecipe>().setType(ISpellRecipe.class)
-				.setName(new ResourceLocation(AlchemicalBrews.MOD_ID, "spell_recipes")).create();
+				.setName(new ResourceLocation(AlchemicalConstants.MOD_ID, "spell_recipes")).create();
 	}
 
 	@SubscribeEvent
@@ -117,6 +141,7 @@ public class ModRegistry {
 		registry.register(ModIngredients.STRAY_BONE);
 
 		registry.register(ModIngredients.DIAMOND_ORE);
+		registry.register(ModIngredients.SPAWNER);
 	}
 
 	@SubscribeEvent
@@ -138,9 +163,114 @@ public class ModRegistry {
 				new ItemStack(Blocks.REDSTONE_LAMP), ModIngredients.STRAY_BONE,
 				ModIngredients.STRAY_BONE, ModIngredients.STRAY_BONE).setRegistryName("gardening_lamp"));
 
-		registry.register(
-				new StackSpellRecipe(new ItemStack(Blocks.DIAMOND_BLOCK), new ItemStack(Items.DIAMOND),
-						ModIngredients.DIAMOND_ORE).setRegistryName("diamond_block"));
+		registry.register(new StackSpellRecipe(new ItemStack(Blocks.DIAMOND_BLOCK),
+				new ItemStack(Items.DIAMOND), ModIngredients.DIAMOND_ORE, ModIngredients.DIAMOND_ORE)
+						.setRegistryName("diamond_block"));
+		registry.register(new ISpellRecipe() {
+
+			@Override
+			public ISpellRecipe setRegistryName(ResourceLocation name) {
+				return this;
+			}
+
+			@Override
+			public ResourceLocation getRegistryName() {
+				return new ResourceLocation("pig_spawner");
+			}
+
+			@Override
+			public Class<ISpellRecipe> getRegistryType() {
+				return ISpellRecipe.class;
+			}
+
+			@Override
+			public ItemStack getCatalyst() {
+				return new ItemStack(Items.PORKCHOP);
+			}
+
+			@Override
+			public List<IngredientStack> getIngredients() {
+				List<IngredientStack> ings = new ArrayList<>();
+				ings.add(new IngredientStack(ModIngredients.SPAWNER));
+				ings.add(new IngredientStack(ModIngredients.JEB_WOOL));
+				return ings;
+			}
+
+			@Override
+			public void executeResult(World world, EntityPlayer player, BlockPos pos,
+					List<IngredientStack> ings) {
+				BlockPos spawnerPos = null;
+				for (IngredientStack ing : ings)
+					if (ing.getIngredient() instanceof BlockSpellIngredient
+							&& ((BlockSpellIngredient) ing.getIngredient()).getState()
+									.getBlock() instanceof BlockMobSpawner)
+						spawnerPos = ((BlockSpellIngredient) ing.getIngredient()).getPos(ing);
+				if (spawnerPos == null)
+					return;
+				TileEntity te = world.getTileEntity(spawnerPos);
+				if (!(te instanceof TileEntityMobSpawner))
+					return;
+				TileEntityMobSpawner spawner = (TileEntityMobSpawner) te;
+				spawner.getSpawnerBaseLogic().setEntityId(new ResourceLocation("minecraft", "pig"));
+				spawner.markDirty();
+				world.markBlockRangeForRenderUpdate(spawnerPos, spawnerPos);
+			}
+		});
+		registry.register(new ISpellRecipe() {
+
+			@Override
+			public ISpellRecipe setRegistryName(ResourceLocation name) {
+				return this;
+			}
+
+			@Override
+			public ResourceLocation getRegistryName() {
+				return new ResourceLocation("jungle_biome");
+			}
+
+			@Override
+			public Class<ISpellRecipe> getRegistryType() {
+				return ISpellRecipe.class;
+			}
+
+			@Override
+			public ItemStack getCatalyst() {
+				return new ItemStack(Blocks.LOG, 1, 3);
+			}
+
+			@Override
+			public List<IngredientStack> getIngredients() {
+				List<IngredientStack> ings = new ArrayList<>();
+				ings.add(new IngredientStack(ModIngredients.JEB_WOOL));
+				return ings;
+			}
+
+			@Override
+			public void executeResult(World world, EntityPlayer player, BlockPos pos,
+					List<IngredientStack> ings) {
+				if (world.isRemote)
+					return;
+				List<BlockPos> poses = new ArrayList<>();
+				for (int x = -8; x < 16; x++)
+					for (int z = -8; z < 16; z++)
+						poses.add(pos.add(x, 0, z));
+
+				int delay = 0;
+				while (!poses.isEmpty()) {
+					List<BlockPos> subset = new ArrayList<>();
+					for (int i = 0; i < world.rand.nextInt(8) + 16 && !poses.isEmpty(); i++) {
+						int index = world.rand.nextInt(poses.size());
+						subset.add(poses.get(index));
+						poses.remove(index);
+					}
+
+					TickScheduler.scheduleTask(world, 10 * delay++, () -> {
+						BiomeModifier.setMultiBiome(world, Biomes.JUNGLE,
+								subset.toArray(new BlockPos[0]));
+					});
+				}
+			}
+		});
 	}
 
 	@SubscribeEvent

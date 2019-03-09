@@ -11,13 +11,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import us.myles_selim.alchemical_brews.AlchemicalBrews;
+import us.myles_selim.alchemical_brews.AlchemicalConstants;
 import us.myles_selim.alchemical_brews.ModRegistry;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
 
 public abstract class SpecialStackSpellIngredient extends SpellIngredient {
 
-	public static final String INGREDIENT_KEY = AlchemicalBrews.MOD_ID + "_ingredient";
+	public static final String INGREDIENT_KEY = AlchemicalConstants.MOD_ID + "_ingredient";
 
 	public SpecialStackSpellIngredient(String name) {
 		super(name);
@@ -50,9 +50,10 @@ public abstract class SpecialStackSpellIngredient extends SpellIngredient {
 		return false;
 	}
 
-//	public String getNBTKey() {
-//		return AlchemicalBrews.MOD_ID + ":" + this.getRegistryName().getResourcePath();
-//	}
+	// public String getNBTKey() {
+	// return AlchemicalConstants.MOD_ID + ":" +
+	// this.getRegistryName().getResourcePath();
+	// }
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,

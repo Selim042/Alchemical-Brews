@@ -19,12 +19,13 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import us.myles_selim.alchemical_brews.AlchemicalBrews;
+import us.myles_selim.alchemical_brews.AlchemicalConstants;
 
 public class ItemSpawnPotion extends Item {
 
 	public ItemSpawnPotion() {
 		this.setRegistryName("spawn_potion");
-		this.setUnlocalizedName(AlchemicalBrews.MOD_ID + ".spawn_potion");
+		this.setUnlocalizedName(AlchemicalConstants.MOD_ID + ".spawn_potion");
 		this.setMaxStackSize(1);
 		this.setCreativeTab(AlchemicalBrews.RESULTS_TAB);
 	}
