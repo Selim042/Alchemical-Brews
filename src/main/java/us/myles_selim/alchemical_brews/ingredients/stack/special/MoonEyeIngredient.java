@@ -16,7 +16,7 @@ import us.myles_selim.alchemical_brews.utils.MiscUtils;
 public class MoonEyeIngredient extends SpecialStackSpellIngredient {
 
 	public MoonEyeIngredient() {
-		super("moon_fermented_eye");
+		setRegistryName("moon_fermented_eye");
 	}
 
 	@Override

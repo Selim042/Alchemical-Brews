@@ -5,6 +5,7 @@ import java.util.HashSet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -80,8 +81,18 @@ public class BiomeUpdateMessage implements IMessage {
 								(chunkX << 4) + 15, 256, (chunkZ << 4) + 15);
 					}
 				}
-			});
 
+				for (BlockPos bp : message.toUpdate) {
+					for (int i = 0; i < 3 - Minecraft.getMinecraft().gameSettings.particleSetting; i++) {
+						BlockPos pp = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(bp);
+						world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY,
+								pp.getX() + 0.25f + (world.rand.nextFloat() / 2), pp.getY(),
+								pp.getZ() + 0.25f + (world.rand.nextFloat() / 2),
+								world.rand.nextFloat() / 10, 0.25D - world.rand.nextFloat() / 4,
+								world.rand.nextFloat() / 10);
+					}
+				}
+			});
 		}
 
 	}

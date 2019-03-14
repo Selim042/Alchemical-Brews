@@ -22,7 +22,7 @@ import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngred
 public class StrayBoneIngredient extends SpecialStackSpellIngredient {
 
 	public StrayBoneIngredient() {
-		super("stray_bone");
+		setRegistryName("stray_bone");
 	}
 
 	@Override

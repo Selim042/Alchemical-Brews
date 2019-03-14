@@ -15,7 +15,7 @@ import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngred
 public class EndDiamondIngredient extends SpecialStackSpellIngredient {
 
 	public EndDiamondIngredient() {
-		super("end_diamond");
+		setRegistryName("end_diamond");
 	}
 
 	@Override

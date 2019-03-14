@@ -14,6 +14,11 @@ public final class IngredientStack {
 		nbt = new NBTTagCompound();
 	}
 
+	public IngredientStack(IngredientStack stack) {
+		this.ingredient = stack.ingredient;
+		this.nbt = stack.nbt.copy();
+	}
+
 	public IngredientStack(NBTTagCompound nbt) {
 		ResourceLocation loc = new ResourceLocation(nbt.getString("ingredient"));
 		this.ingredient = ModRegistry.ModRegistries.SPELL_INGREDIENTS.getValue(loc);
@@ -42,12 +47,19 @@ public final class IngredientStack {
 		return nbt;
 	}
 
+	public boolean equalsPrecise(Object obj) {
+		if (!(obj instanceof IngredientStack))
+			return false;
+		IngredientStack stack = (IngredientStack) obj;
+		return this.ingredient.equalsPrecise(this, stack) && stack.ingredient.equalsPrecise(this, stack);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof IngredientStack))
 			return false;
 		IngredientStack stack = (IngredientStack) obj;
-		return this.ingredient.equals(this, stack) && stack.ingredient.equals(this, stack);
+		return this.ingredient.equals(this, stack);
 	}
 
 }

@@ -22,7 +22,7 @@ import us.myles_selim.alchemical_brews.utils.MiscUtils;
 public class FullMoonGunpowderIngredient extends SpecialStackSpellIngredient {
 
 	public FullMoonGunpowderIngredient() {
-		super("full_moon_gunpowder");
+		setRegistryName("full_moon_gunpowder");
 	}
 
 	@Override

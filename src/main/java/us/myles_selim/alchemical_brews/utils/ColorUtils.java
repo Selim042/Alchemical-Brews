@@ -6,6 +6,20 @@ public class ColorUtils {
 		int ret = r;
 		ret = (ret << 8) + g;
 		ret = (ret << 8) + b;
+		// ret = (ret << 8) + 0xFF;
+		return ret;
+	}
+
+	public static int invIntsToRGB(int[] rgb) {
+		if (rgb.length < 3 || rgb.length > 4)
+			throw new IllegalArgumentException("rgb length must be 3 or 4");
+		int ret = rgb[0];
+		ret = (ret << 8) + rgb[1];
+		ret = (ret << 8) + rgb[2];
+		if (rgb.length > 3)
+			ret = (ret << 8) + rgb[3];
+		// else
+		// ret = (ret << 8) + 0xFF;
 		return ret;
 	}
 

@@ -1,22 +1,9 @@
 package us.myles_selim.alchemical_brews.ingredients;
 
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 
 public abstract class SpellIngredient extends IForgeRegistryEntry.Impl<SpellIngredient> {
-
-	public SpellIngredient(String name) {
-		this.setRegistryName(name);
-	}
-
-	public SpellIngredient(ResourceLocation name) {
-		this.setRegistryName(name);
-	}
-
-	public SpellIngredient(String modID, String name) {
-		this.setRegistryName(modID, name);
-	}
 
 	public abstract int getIngredientColor();
 
@@ -24,7 +11,12 @@ public abstract class SpellIngredient extends IForgeRegistryEntry.Impl<SpellIngr
 		return true;
 	}
 
-	public void onCraft(TileBrewingCauldron cauldron, IngredientStack stack) {}
+	public void onCraft(TileBrewingCauldron cauldron, IngredientStack stack, boolean used) {}
+
+	public boolean equalsPrecise(IngredientStack stackA, IngredientStack stackB) {
+		return stackA.getIngredient().equals(stackB.getIngredient())
+				&& stackA.getTag().equals(stackB.getTag());
+	}
 
 	public boolean equals(IngredientStack stackA, IngredientStack stackB) {
 		return stackA.getIngredient().equals(stackB.getIngredient());

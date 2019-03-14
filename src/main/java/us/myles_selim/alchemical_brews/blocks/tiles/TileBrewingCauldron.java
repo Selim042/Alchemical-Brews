@@ -17,6 +17,7 @@ import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.myles_selim.alchemical_brews.IngredientList;
 import us.myles_selim.alchemical_brews.ModRegistry;
 import us.myles_selim.alchemical_brews.blocks.BlockBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.IngredientStack;
@@ -29,19 +30,19 @@ import us.myles_selim.alchemical_brews.utils.VanillaPacketDispatcher;
 public class TileBrewingCauldron extends TileEntity implements ITickable {
 
 	private final List<ItemStack> failedCatalysts = new ArrayList<>();
-	private final List<IngredientStack> ingredients;
+	private final IngredientList ingredients;
 	private BlockPos waterSource;
 	private int transferCooldown = -1;
 
 	public TileBrewingCauldron() {
-		this.ingredients = new ArrayList<>();
+		this.ingredients = new IngredientList();
 	}
 
 	public BlockPos getWaterSource() {
 		return waterSource;
 	}
 
-	public List<IngredientStack> getIngredients() {
+	public IngredientList getIngredients() {
 		return ingredients;
 	}
 
@@ -49,10 +50,13 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 		if (failedCatalysts.contains(stack))
 			return false;
 		for (ISpellRecipe r : ModRegistry.ModRegistries.SPELL_RECIPES.getValuesCollection()) {
-			if (r.matches(getIngredients()) && ItemStack.areItemsEqual(r.getCatalyst(), stack)) {
+			if (r.matches(getIngredients()) && r.matchesCatalyst(stack)) {
 				r.executeResult(getWorld(), player, pos, getIngredients());
-				for (IngredientStack ing : getIngredients())
-					ing.getIngredient().onCraft(this, ing);
+				IngredientList unused = new IngredientList(r.getIngredients());
+				for (IngredientStack ing : getIngredients()) {
+					ing.getIngredient().onCraft(this, ing, unused.containsPrecise(ing));
+					unused.removePrecise(ing);
+				}
 				getIngredients().clear();
 				getWorld().setBlockState(getPos(),
 						ModRegistry.ModBlocks.SPELL_CAULDRON.getDefaultState());
@@ -109,7 +113,7 @@ public class TileBrewingCauldron extends TileEntity implements ITickable {
 
 	protected boolean updateCauldron() {
 		if (this.world != null && !this.world.isRemote) {
-			if (this.transferCooldown <= 0 && ingredients.size() < 16 && updateIngredients()) {
+			if (this.transferCooldown <= 0 && updateIngredients()) {
 				this.transferCooldown = 8;
 				this.markDirty();
 				VanillaPacketDispatcher.dispatchTEToNearbyPlayers(getWorld(), getPos());

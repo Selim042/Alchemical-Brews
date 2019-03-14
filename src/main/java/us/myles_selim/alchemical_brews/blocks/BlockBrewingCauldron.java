@@ -42,6 +42,7 @@ import us.myles_selim.alchemical_brews.AlchemicalConstants;
 import us.myles_selim.alchemical_brews.ModRegistry;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.IngredientStack;
+import us.myles_selim.alchemical_brews.ingredients.types.BlockSpellIngredient;
 
 public class BlockBrewingCauldron extends BlockContainer {
 
@@ -120,8 +121,13 @@ public class BlockBrewingCauldron extends BlockContainer {
 			playerIn.sendStatusMessage(new TextComponentString("in cauldron"), false);
 			for (IngredientStack ing : cauldron.getIngredients())
 				if (ing != null)
-					playerIn.sendStatusMessage(new TextComponentString(
-							" - " + ing.getIngredient().getRegistryName().toString()), false);
+					playerIn.sendStatusMessage(new TextComponentString(" - "
+							+ ing.getIngredient().getRegistryName().toString()
+							+ (ing.getIngredient() instanceof BlockSpellIngredient
+									? "{" + ((BlockSpellIngredient) ing.getIngredient()).getPos(ing)
+											+ "}"
+									: "")) {},
+							false);
 				else
 					playerIn.sendStatusMessage(new TextComponentString(" - null ing"), false);
 		}

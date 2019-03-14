@@ -18,7 +18,7 @@ import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngred
 public class FriedNetherCocoaIngredient extends SpecialStackSpellIngredient {
 
 	public FriedNetherCocoaIngredient() {
-		super("fried_nether_cocoa");
+		setRegistryName("fried_nether_cocoa");
 	}
 
 	@Override

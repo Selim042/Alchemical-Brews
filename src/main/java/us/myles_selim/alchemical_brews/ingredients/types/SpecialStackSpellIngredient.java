@@ -19,18 +19,6 @@ public abstract class SpecialStackSpellIngredient extends SpellIngredient {
 
 	public static final String INGREDIENT_KEY = AlchemicalConstants.MOD_ID + "_ingredient";
 
-	public SpecialStackSpellIngredient(String name) {
-		super(name);
-	}
-
-	public SpecialStackSpellIngredient(ResourceLocation name) {
-		super(name);
-	}
-
-	public SpecialStackSpellIngredient(String modID, String name) {
-		super(modID, name);
-	}
-
 	public final ItemStack getStack() {
 		ItemStack ret = getIngredientStack();
 		NBTTagCompound nbt = ret.getTagCompound();

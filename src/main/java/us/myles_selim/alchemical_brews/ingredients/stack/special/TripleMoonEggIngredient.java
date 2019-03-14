@@ -23,7 +23,7 @@ public class TripleMoonEggIngredient extends SpecialStackSpellIngredient {
 	private static final String MOON_TIMER = AlchemicalConstants.MOD_ID + "_egg_time";
 
 	public TripleMoonEggIngredient() {
-		super("triple_moon_egg");
+		setRegistryName("triple_moon_egg");
 	}
 
 	@Override

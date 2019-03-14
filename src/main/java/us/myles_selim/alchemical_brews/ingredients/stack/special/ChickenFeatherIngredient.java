@@ -22,7 +22,7 @@ import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngred
 public class ChickenFeatherIngredient extends SpecialStackSpellIngredient {
 
 	public ChickenFeatherIngredient() {
-		super("chicken_feather");
+		setRegistryName("chicken_feather");
 	}
 
 	@Override

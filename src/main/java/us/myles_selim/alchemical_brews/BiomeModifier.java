@@ -22,16 +22,6 @@ import us.myles_selim.alchemical_brews.network.BiomeUpdateMessage;
 
 public class BiomeModifier {
 
-	// public static final Map<BiomeDictionary.Type, ItemRef> types;
-	//
-	// static {
-	// types = ImmutableMap.<BiomeDictionary.Type, ItemRef>builder()
-	// .put(BiomeDictionary.Type.END, ItemRef.wrap(Items.ENDER_PEARL))
-	// .put(BiomeDictionary.Type.NETHER,
-	// ItemRef.wrap(Items.NETHER_WART)).build();
-	//
-	// }
-
 	public static void setMultiBiome(World world, Biome biome, BlockPos... poses) {
 		byte id = (byte) Biome.getIdForBiome(biome);
 		HashMultimap<ChunkPos, BlockPos> changes = HashMultimap.create();

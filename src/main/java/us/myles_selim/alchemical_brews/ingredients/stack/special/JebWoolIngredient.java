@@ -29,7 +29,7 @@ import us.myles_selim.alchemical_brews.ingredients.types.SpecialStackSpellIngred
 public class JebWoolIngredient extends SpecialStackSpellIngredient {
 
 	public JebWoolIngredient() {
-		super("jeb_wool");
+		setRegistryName("jeb_wool");
 	}
 
 	@Override

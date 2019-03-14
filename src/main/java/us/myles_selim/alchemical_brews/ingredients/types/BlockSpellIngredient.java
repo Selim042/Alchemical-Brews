@@ -5,35 +5,22 @@ import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import us.myles_selim.alchemical_brews.blocks.tiles.TileBrewingCauldron;
 import us.myles_selim.alchemical_brews.ingredients.IngredientStack;
 import us.myles_selim.alchemical_brews.ingredients.SpellIngredient;
 
-// TODO: find a way to attach position of ing to this, mainly for BlockSpellIngredient#onCraft
-public abstract class BlockSpellIngredient extends SpellIngredient {
+public class BlockSpellIngredient extends SpellIngredient {
 
 	private static final Map<IBlockState, BlockSpellIngredient> STATE_MAP = new HashMap<>();
 
 	private final IBlockState state;
+	private final int color;
 
-	public BlockSpellIngredient(String name, IBlockState state) {
-		super(name);
+	public BlockSpellIngredient(IBlockState state, int color) {
 		STATE_MAP.put(state, this);
 		this.state = state;
-	}
-
-	public BlockSpellIngredient(ResourceLocation name, IBlockState state) {
-		super(name);
-		STATE_MAP.put(state, this);
-		this.state = state;
-	}
-
-	public BlockSpellIngredient(String modID, String name, IBlockState state) {
-		super(modID, name);
-		STATE_MAP.put(state, this);
-		this.state = state;
+		this.color = color;
 	}
 
 	public IBlockState getState() {
@@ -46,9 +33,14 @@ public abstract class BlockSpellIngredient extends SpellIngredient {
 	}
 
 	@Override
-	public void onCraft(TileBrewingCauldron cauldron, IngredientStack stack) {
+	public int getIngredientColor() {
+		return this.color;
+	}
+
+	@Override
+	public void onCraft(TileBrewingCauldron cauldron, IngredientStack stack, boolean used) {
 		BlockPos pos = getPos(stack);
-		if (pos == null)
+		if (pos == null || !used)
 			return;
 		if (cauldron.getWorld().getBlockState(pos).equals(this.getState()))
 			cauldron.getWorld().destroyBlock(pos, false);
@@ -59,6 +51,19 @@ public abstract class BlockSpellIngredient extends SpellIngredient {
 		if (posNbt == null)
 			return null;
 		return new BlockPos(posNbt.getInteger("x"), posNbt.getInteger("y"), posNbt.getInteger("z"));
+	}
+
+	public void setPos(IngredientStack stack, BlockPos pos) {
+		NBTTagCompound posNbt = new NBTTagCompound();
+		posNbt.setInteger("x", pos.getX());
+		posNbt.setInteger("y", pos.getY());
+		posNbt.setInteger("z", pos.getZ());
+		stack.getTag().setTag("pos", posNbt);
+	}
+
+	@Override
+	public boolean equalsPrecise(IngredientStack stackA, IngredientStack stackB) {
+		return super.equals(stackA, stackB);
 	}
 
 	public static boolean isBlockSpellIngredient(IBlockState state) {

@@ -3,6 +3,7 @@ package us.myles_selim.alchemical_brews;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.OreDictionary;
 import us.myles_selim.alchemical_brews.entities.EntitySpecialSpellItem;
 import us.myles_selim.alchemical_brews.network.BiomeUpdateMessage;
 import us.myles_selim.alchemical_brews.network.BiomeUpdateMessage.BiomeUpdateMessageHandler;
@@ -69,6 +71,15 @@ public class AlchemicalBrews {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
+
+		logger.info("---START ORE/BLOCK DISCOVERY---");
+		for (OreSet p : OreSet.getOreSets())
+			logger.info(p.ore + "-" + p.ingot + "-" + p.resource);
+
+		logger.info("coal entries:");
+		for (int id : OreDictionary.getOreIDs(new ItemStack(Items.COAL)))
+			logger.info(" - " + OreDictionary.getOreName(id));
+		logger.info("---END ORE/BLOCK DISCOVERY---");
 	}
 
 }
